@@ -12,9 +12,11 @@ import com.spring.project.entity.QUser;
 import com.spring.project.entity.User;
 
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Transactional(readOnly = true)
+@Slf4j
 public class BlogRepositoryImpl implements BlogRepository {
 
 	private final EntityManager em;
@@ -27,22 +29,25 @@ public class BlogRepositoryImpl implements BlogRepository {
 
 	@Override
 	@Transactional
-	public BlogInfoDto info(String token) {
+	public BlogInfoDto info(String userId) {
 		QBlog qBlog = QBlog.blog;
 		QUser qUser = QUser.user;
-
-		BlogInfoDto blogInfoDto = queryFactory
-				.select(Projections.bean(BlogInfoDto.class, qBlog.seq, qBlog.category, qBlog.profile))
-				.from(qBlog)
-				.where(qBlog.user.id.eq(token))
-				.fetchOne();
 		
+		BlogInfoDto blogInfoDto = queryFactory
+				.select(Projections.bean(BlogInfoDto.class, qBlog.seq, qBlog.category, qBlog.profile, qBlog.title))
+				.from(qBlog)
+				.where(qBlog.user.id.eq(userId))
+				.fetchOne();
+
+		// blog 첫 개설인 경우
 		if(blogInfoDto == null) {
 			User user = queryFactory
 				.select(qUser)
-				.where(qUser.id.eq(token))
+				.from(qUser)
+				.where(qUser.id.eq(userId))
 				.fetchOne();
 			Blog blog = Blog.create(user);
+			em.persist(blog);
 			
 			return blogInfoDto = new BlogInfoDto(blog);
 		} else {

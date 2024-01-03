@@ -17,6 +17,7 @@ public class BlogInfoDto {
 	private String profile;
 	private List<String> category = new ArrayList<>();
 	private int updatedAt;
+	private String title;
 
 	public BlogInfoDto(Blog blog) {
 		this.seq = blog.getSeq();
@@ -24,6 +25,7 @@ public class BlogInfoDto {
 		this.profile = blog.getProfile();
 		this.category = blog.getCategory();
 		this.updatedAt = blog.getUpdatedAt();
+		this.title = blog.getTitle();
 	}
 
 }

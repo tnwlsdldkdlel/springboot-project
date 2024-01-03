@@ -34,12 +34,20 @@ public class Blog {
 	@OneToOne
 	@JoinColumn(name = "seq_user")
 	private User user;
+	
+	private String title;
 
 	public static Blog create(User user) {
+		List<String> defaultCategory = new ArrayList<>();
+		defaultCategory.add("게시판");
+		
 		Blog blog = new Blog();
 		blog.setCreatedAt(Util.createdAt());
 		blog.setUpdatedAt(Util.createdAt());
 		blog.createUser(user);
+		blog.setTitle(user.getId() + "님의 블로그");
+		blog.setProfile(user.getId() + "님의 블로그");
+		blog.setCategory(defaultCategory);
 
 		return blog;
 	}
