@@ -30,6 +30,8 @@ public class Blog {
 	private int createdAt;
 
 	private int updatedAt;
+	
+	private String profileImg;
 
 	@OneToOne
 	@JoinColumn(name = "seq_user")

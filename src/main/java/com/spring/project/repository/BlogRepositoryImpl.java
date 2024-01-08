@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.spring.project.Util.JwtUtil;
 import com.spring.project.dto.BlogInfoDto;
 import com.spring.project.entity.Blog;
 import com.spring.project.entity.QBlog;
@@ -34,7 +35,7 @@ public class BlogRepositoryImpl implements BlogRepository {
 		QUser qUser = QUser.user;
 		
 		BlogInfoDto blogInfoDto = queryFactory
-				.select(Projections.bean(BlogInfoDto.class, qBlog.seq, qBlog.category, qBlog.profile, qBlog.title))
+				.select(Projections.bean(BlogInfoDto.class, qBlog.seq, qBlog.category, qBlog.profile, qBlog.title, qBlog.profileImg))
 				.from(qBlog)
 				.where(qBlog.user.id.eq(userId))
 				.fetchOne();
@@ -53,5 +54,15 @@ public class BlogRepositoryImpl implements BlogRepository {
 		} else {
 			return blogInfoDto;
 		}
+	}
+
+	@Override
+	public void updateBlogProfileImg(BlogInfoDto blogInfoDto) {
+		String userId = new JwtUtil().getUserId(blogInfoDto.getToken());
+		
+		QBlog qBlog = QBlog.blog;
+		BlogInfoDto find = em.find(blogInfoDto.getClass(), userId);
+		
+		log.info(find.toString());
 	}
 }

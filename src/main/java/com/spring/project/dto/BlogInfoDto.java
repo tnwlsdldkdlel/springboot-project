@@ -18,6 +18,8 @@ public class BlogInfoDto {
 	private List<String> category = new ArrayList<>();
 	private int updatedAt;
 	private String title;
+	private String profileImg;
+	private String token;
 
 	public BlogInfoDto(Blog blog) {
 		this.seq = blog.getSeq();
@@ -26,6 +28,7 @@ public class BlogInfoDto {
 		this.category = blog.getCategory();
 		this.updatedAt = blog.getUpdatedAt();
 		this.title = blog.getTitle();
+		this.profileImg = blog.getProfileImg();
 	}
 
 }
