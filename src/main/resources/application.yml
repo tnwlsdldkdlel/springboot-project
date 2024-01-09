@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/project?serverTimezone=Asia/Seoul
     username: root
     password: tnwls5722!
+    hikari:
+      connection-timeout: 600000
+      maximum-pool-size: 11
+      max-lifetime: 1800000
     
   jpa:
     hibernate:
@@ -17,6 +21,13 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  servlet:
+    multipart:
+      location: C:\Users\PC\Documents\workspace\vscode\quasar-project\src\images
    
 logging.level:
   org.hibernate.SQL: debug
+  com.zaxxer.hikari: trace
+  com.zaxxer.hikari.HikariConfig: debug
+  org.springframework.transaction: DEBUG
+  org.springframework.orm.jpa: DEBUG

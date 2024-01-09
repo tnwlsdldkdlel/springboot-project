@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +33,11 @@ public class BlogController {
 	public ResponseEntity<ResultDto> info(@PathVariable("token") String token) {
 		String userId = new JwtUtil().getUserId(token);
 		BlogInfoDto blogInfoDto = blogRepository.info(userId);
-
+		
+		if(blogInfoDto == null) {
+			blogInfoDto = blogRepository.create(userId);
+		}
+		
 		Map<String, Object> dataMap = new HashMap<>();
 		dataMap.put("blogInfo", blogInfoDto);
 
@@ -44,11 +48,20 @@ public class BlogController {
 		return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
 	}
 	
-	@PutMapping("/profile")
-	public void profile(BlogInfoDto blogInfoDto) {
+	@PostMapping("/profile")
+	public ResponseEntity<ResultDto> profile(BlogInfoDto blogInfoDto) {
+		ResultDto resultDto = new ResultDto();
 		
-		blogRepository.updateBlogProfileImg(blogInfoDto);
-		//return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
+		try {
+			blogRepository.updateBlogProfileImg(blogInfoDto);
+			resultDto.setResult("success");
+		} catch (Exception e) {
+			resultDto.setResult("fail");
+			resultDto.setMessage(e.getMessage());
+		}
+		
+		
+		return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
 	}
 
 }
