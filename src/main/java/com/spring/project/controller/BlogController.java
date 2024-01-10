@@ -33,11 +33,11 @@ public class BlogController {
 	public ResponseEntity<ResultDto> info(@PathVariable("token") String token) {
 		String userId = new JwtUtil().getUserId(token);
 		BlogInfoDto blogInfoDto = blogRepository.info(userId);
-		
-		if(blogInfoDto == null) {
+
+		if (blogInfoDto == null) {
 			blogInfoDto = blogRepository.create(userId);
 		}
-		
+
 		Map<String, Object> dataMap = new HashMap<>();
 		dataMap.put("blogInfo", blogInfoDto);
 
@@ -47,21 +47,33 @@ public class BlogController {
 
 		return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
 	}
-	
-	@PostMapping("/profile")
-	public ResponseEntity<ResultDto> profile(BlogInfoDto blogInfoDto) {
-		ResultDto resultDto = new ResultDto();
-		
-		try {
-			blogRepository.updateBlogProfileImg(blogInfoDto);
-			resultDto.setResult("success");
-		} catch (Exception e) {
-			resultDto.setResult("fail");
-			resultDto.setMessage(e.getMessage());
-		}
-		
-		
-		return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
-	}
 
+//	@PostMapping("/profile")
+//	public ResponseEntity<ResultDto> profile(BlogInfoDto blogInfoDto) {
+//		ResultDto resultDto = new ResultDto();
+//
+//		try {
+//			blogRepository.updateBlogProfileImg(blogInfoDto);
+//			resultDto.setResult("success");
+//		} catch (Exception e) {
+//			resultDto.setResult("fail");
+//			resultDto.setMessage(e.getMessage());
+//		}
+//
+//		return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
+//	}
+
+	@PostMapping("/info")
+	public void info(BlogInfoDto blogInfoDto) {
+		//ResultDto resultDto = new ResultDto();
+		log.info(blogInfoDto.getProfileImg());
+		
+		String flag = blogInfoDto.getUploadProfileImg() == null ? "Y" : "N";
+		log.info(flag);
+//		try {
+//			
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+	}
 }

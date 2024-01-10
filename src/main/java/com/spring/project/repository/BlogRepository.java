@@ -8,5 +8,5 @@ public interface BlogRepository {
 	
 	public BlogInfoDto create(String token);
 	
-	public void updateBlogProfileImg(BlogInfoDto blogInfoDto) throws Exception;
+	public void update(BlogInfoDto blogInfoDto) throws Exception;
 }
